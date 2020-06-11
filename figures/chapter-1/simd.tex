@@ -11,9 +11,9 @@
         \draw (-.5, -.5) rectangle (.5, 3.5);
         \draw (1.5, -.5) rectangle (2.5, 3.5);
         \draw (3.5, -.5) rectangle (4.5, 3.5);
-        \draw[->] (.5, 1.5) --  node[fill=white] {$+$} (1.5, 1.5);
-        \draw[->] (2.5, 1.5) -- node[fill=white] {$=$} (3.5, 1.5);
+        \draw[->] (.5, 1.5) --  node[circle, draw, fill=white] {$+$} (1.5, 1.5);
+        \draw[->] (2.5, 1.5) -- node[circle, draw, fill=white] {$=$} (3.5, 1.5);
     \end{tikzpicture}
     \caption{SIMD Processing Example. One instruction is applied to a block of data items.}
-    \label{}
+    \label{fig:simd}
 \end{figure}

@@ -1,0 +1,69 @@
+\chapter{Synchronization}
+
+\section{Algorithms, Programs \& Processes}
+
+\paragraph{Sequential Algorithm}
+A sequential algorithm is a forma description of the behavior of a sequential state machine.
+
+\paragraph{Concurrent Algorithm}
+The description of a set of sequential states machines that cooperate through a communication medium is called a concurrent algorithm.
+
+\paragraph{Program}
+When the algorithm is written in a specific programming language.
+
+\paragraph{Process}
+The running instance of an algorithm and thus of a program as well.
+
+\section{Process Synchronization}
+Process synchronization occurs when the progress of one or several processes depends on the behavior of other processes.
+Two types of process interaction require synchronization, competition and cooperation.
+
+\subsection{Competition}
+Competition occurs when processes compete to execute some statements and only one process at a time is allowed to execute them.
+
+\subsection{Cooperation}
+Cooperation occurs when one process can only progress after some event on another process.
+
+\paragraph{Barrier}
+A barrier is a set of control points, one per process involved in the barrier,
+such that each process is allowed to pass its control point only when all other processes have attained their own control points.
+From an operation point of view, each process has to stop until all other processes have arrived at their control point.
+
+\subsection{The Producer/Consumer Problem}
+
+In the producer/consumer problem we have a producer that loops forever, producing data items,
+and a consumer that loops forever, consuming said data items.
+
+It is required to ensure that,
+only produced data items are consumed and each produced item is consumed exactly once.
+
+\paragraph{Synchronization Barrier}
+One approach to the problem consists in using a synchronization barrier to ensure that only when a data item is produced the consumer is able to consume it.
+While this approach works it is far from efficient.
+
+\paragraph{Shared Buffer}
+The buffer has size greater than 1 and the underlying structure can be a queue or a circular array.
+Whenever the producer has a new item, it adds the item at the end of the structure,
+the consumer then withdraws items from the head of the structure.
+
+This way the producer only waits whenever the structure is full,
+the consumer will only wait whenever the structure is empty.
+
+\subsection{The Mutual Exclusion Problem}
+
+\paragraph{Critical Section}
+A part (or several parts) that are required to be executed by a single process at a time.
+
+\paragraph{Solution}
+We are required to provide an entry algorithm as well as an exit algorithm,
+these are used to respectively enter and exit the critical section,
+ensuring that the critical section is only executed once.
+
+\paragraph{Mutual Exclusion Definition}
+The mutual exclusion problem consists in implementing the operations to acquire and release a mutex
+in such a way that the following properties are always satisfied:
+
+\begin{itemize}
+    \item \textbf{Mutual Exclusion} - at most one process at a time executes the critical section code.
+    \item \textbf{Starvation-Freedom} - for any process $p$ each invocation of \texttt{acquire\_mutex} $p$ eventually terminates.
+\end{itemize}
