@@ -1,0 +1,78 @@
+\chapter{Parallel Programming}
+
+Parallel programs often start as sequential programs.
+This approach has the advantage of having a previous codebase to validate the new approach,
+furthermore it is easier to start with a sequential approach given the ease of programming and debugging.
+
+To parallelize a program we first have to evaluate if it is worth the effort,
+to do so we first identify the hotspots with a profiler.
+
+The parallelization process starts with the hotspots,
+applying small changes with testing in-between.
+
+\section{Finding Concurrency}
+
+The first step in parallelizing a candidate program is to find concurrency,
+in other words, we have to find tasks that can be executed at the same time.
+
+To do so, we need to consider flexibility, efficiency and simplicity.
+
+\subsection{Task Decomposition Guidelines}
+
+\paragraph{Flexibility}
+The program design should afford flexibility in the number and size of the tasks generated.
+
+\paragraph{Efficiency}
+Tasks should have enough work as to amortize the cost of creating and managing them.
+furthermore, they should be sufficiently independent so that managing dependencies does not become the bottleneck.
+
+\paragraph{Simplicity}
+The code must remain as simple and readable as possible so as to be debuggable and quick to understand and modify.
+
+\subsection{Data Decomposition Guidelines}
+
+Often implied by task decomposition,
+data decomposition is a good starting point when the main computation is organized around manipulation of large data structures
+or similar operations are applied to different parts of the data structure.
+
+\paragraph{Flexibility}
+The size and number of data chunks should support a wide range of executions.
+
+\paragraph{Efficiency}
+Data chunks should generate considerable amounts of work to minimize the communication and management impact.
+
+\paragraph{Simplicity}
+Complex data compositions can get difficult to manage and debug.
+
+\section{Algorithmic Structure Design Space}
+
+The high level approach of an algorithm can be split in to three possibilities, all approaches can then be split into two sub approaches,
+the linear or recursive approach.
+
+\begin{itemize}
+    \item Organize by Tasks - the linear approach to this problem is to make use of task parallelism, the recursive approach is through divide and conquer.
+    \item Organize by Data Decomposition - the linear approach of data decomposition is by making use of geometric decomposition (arrays), the recursive approach is through recursive data structures.
+    \item Organize by Data Flow - the linear solution is to make use of the pipeline pattern, the recursive approach is based on event coordination.
+\end{itemize}
+
+\section{Implementation Environment}
+
+\subsection{Program Structures}
+
+\paragraph{Single Program Multiple Data}
+In the SMPD approach all tasks execute the same program in parallel but each has its own set of data.
+
+\paragraph{Master/Worker Pattern}
+The master/worker is works by having a thread distribute work amongst the others,
+the workers execute concurrently and each worker takes tasks from the bag of tasks.
+It is suited for embarrassingly parallel problems.
+
+\paragraph{Loop Parallelism Pattern}
+This pattern exploits the iterative nature of some programs by parallelizing the execution of loop iterations.
+This requires the loop not to have dependencies among iterations.
+
+\paragraph{Fork/Join Pattern}
+A main task forks off some number of other tasks that then continue in parallel, the main task then waits for completion before moving on.
+
+\paragraph{Pipeline Pattern}
+Tasks are applied in sequence to data.

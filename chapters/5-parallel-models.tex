@@ -1,0 +1,46 @@
+\chapter{Parallel Models \& Dependencies}
+
+\section{Parallelism, Correctness \& Dependencies}
+
+Parallel execution shall always be constrained by the sequence of operations needed to be performed for a correct result.
+Such execution must address control, data and system dependencies.
+
+A \textit{dependency} arises when one operation depends on an earlier operation to complete and produce a result before this later operation can be performed.
+
+\subsection{Sequential Consistency}
+
+Sequential consistency implies that the execution of two statements do not interfere with each other, meaning their running order is irrelevant.
+This means that the statements are \textit{independent},
+if the order of execution affects the computation outcome they are deemed \textit{dependent}.
+
+\subsection{Dependencies}
+
+\paragraph{True Dependency}
+A statement $S2$ has a true dependency on statement $S1$ if and only if $S2$ reads a value written by $S1$.
+This dependency is also known as Read After Write (RAW).
+
+Formally we can describe a true dependency as follows:
+\begin{equation*}
+    out(S_1) \cap in(S_2) \neq \emptyset
+\end{equation*}
+
+\paragraph{Anti-Dependency}
+A statement $S2$ has an anti-dependency in statement $S1$ if and only if $S2$ writes a value read by $S1$.
+This dependency is also known as Write After Read (WAR).
+
+Formally we can describe an anti-dependency as follows:
+\begin{equation*}
+    in(S_1) \cap out(S_2) \neq \emptyset
+\end{equation*}
+
+\paragraph{Output Dependency}
+A statement $S2$ has an output dependency on $S1$ if and only if $S2$ writes a variable written by $S1$.
+This dependency is also known as Write After Write (WAW).
+
+Formally we can describe an output dependency as follows:
+\begin{equation*}
+    out(S_1) \cap out(S_2) \neq \emptyset
+\end{equation*}
+
+\paragraph{Loop-Carried Dependencies}
+A loop-carried dependency is a dependency between two statement instances in two different loop iterations.

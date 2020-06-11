@@ -1,0 +1,92 @@
+\chapter{Parallel Patterns}
+
+A parallel pattern is a recurring combination of task distribution and data access that solves a specific design problem in parallel algorithm design.
+
+\section{Nesting Pattern}
+
+Nesting is the ability to hierarchically compose patterns.
+This pattern appears in both serial and parallel algorithms.
+
+It is a compositional pattern, allowing other patterns to be composed in such way that task blocks can be replaced with another pattern.
+
+\section{Control Patterns}
+
+\subsection{Serial Control Patterns}
+
+Structured serial programming is based on following patterns.
+
+\paragraph{Sequence}
+Ordered list of tasks that are executed in a specific order.
+
+\paragraph{Selection}
+Condition $c$ is first evaluated.
+Either task $a$ or $b$ is executed depending on the true or false result of $c$.
+
+\paragraph{Iteration}
+Condition $c$ is evaluated, if it is true $a$ is evaluated again,
+afterwards $c$ is evaluated again.
+This repeats until $c$ is false.
+
+\paragraph{Recursion}
+Dynamic form of nesting allowing functions to call themselves.
+
+\subsection{Parallel Control Patterns}
+Parallel control patterns extend serial control patterns.
+Each parallel control pattern is related to at least one serial control pattern.
+
+\paragraph{Fork-Join}
+Allows control flow to fork into multiple parallel flows, then rejoin later.
+
+\paragraph{Map}
+Performs a function over every element of a collection, it replicates a serial iteration pattern.
+
+\paragraph{Stencil}
+Elemental function accesses a set of "neighbors", stencil is a generalization of map.
+
+\paragraph{Reduction}
+Combines every element of a collection using an associative "combiner function".
+
+\paragraph{Scan}
+Computes all partial reductions of a collection.
+For every output in a collection, a reduction of the input up to that point is computed.
+
+\paragraph{Recurrence}
+More complex version of map, where loop iterations can depend on one another.
+
+\section{Data Management Patterns}
+
+\subsection{Serial Data Management Patterns}
+
+\paragraph{Random Read \& Write}
+Memory locations indexed with addresses, used with pointers.
+Aliasing can cause problems when parallelizing the code.
+
+\paragraph{Stack Allocation}
+Useful for dynamically allocate data in LIFO manner.
+It preserves locality and when parallelized, since each threads gets its own stack thread locality is preserved.
+
+\paragraph{Heap Allocation}
+Useful when data cannot be allocated in LIFO manner.
+Slower and more complex when compared with stack allocations.
+A parallelized allocator should be used when allocating memory in parallel.
+
+\paragraph{Objects}
+Objects are language constructs to associate data with code to manipulate and manage that data.
+
+\subsection{Parallel Data Management Patterns}
+
+\paragraph{Pack}
+Used to eliminate unused space in a collection.
+
+\paragraph{Pipeline}
+Connects tasks in a producer-consumer manner.
+
+\paragraph{Geometric Decomposition}
+Arranges data into subcollections.
+Overlapping and non-overlapping compositions are possible.
+
+\paragraph{Gather}
+Reads a collection of data given a collection of indices.
+
+\paragraph{Scatter}
+The inverse of gather, given a collection of indices, it writes to such indices.
