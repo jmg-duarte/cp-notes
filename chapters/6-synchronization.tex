@@ -59,11 +59,11 @@ We are required to provide an entry algorithm as well as an exit algorithm,
 these are used to respectively enter and exit the critical section,
 ensuring that the critical section is only executed once.
 
-\paragraph{Mutual Exclusion Definition}
+\paragraph{Definition}
 The mutual exclusion problem consists in implementing the operations to acquire and release a mutex
 in such a way that the following properties are always satisfied:
 
 \begin{itemize}
     \item \textbf{Mutual Exclusion} - at most one process at a time executes the critical section code.
-    \item \textbf{Starvation-Freedom} - for any process $p$ each invocation of \texttt{acquire\_mutex} $p$ eventually terminates.
+    \item \textbf{Starvation-Freedom} - for any process $p$ each invocation of \texttt{acquire\_mutex} by $p$ eventually terminates.
 \end{itemize}
