@@ -1,0 +1,21 @@
+\section{Ordering Violation}
+
+Missing or incorrect synchronization between two processes.
+
+\begin{lstlisting}[caption={Simple Producer, running on Thread $1$}]
+work = null;
+LaunchThread(new Thread(2));
+work = new Work();
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Simple Consumer, running on Thread $2$}]
+ConsumeWork(work);
+\end{lstlisting}
+
+It is possible for work to be consumed before it was initialized,
+thus the correct operation ordering for Thread $1$ would be the following.
+
+\begin{lstlisting}[caption={Simple Correct Producer, running on Thread $1$}]
+work = new Work();
+LaunchThread(new Thread(2));
+\end{lstlisting}

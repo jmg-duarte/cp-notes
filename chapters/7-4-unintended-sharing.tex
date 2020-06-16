@@ -1,0 +1,13 @@
+\section{Unintended Sharing}
+
+This happens when state is shared between processes unintentionally.
+
+\begin{lstlisting}[caption={Example of unintended sharing.}]
+void inc() {
+    static int local = 0;
+    local += 1;
+}
+\end{lstlisting}
+
+Since the \texttt{static} keyword is used the variable \texttt{local} will be kept among runs of the \texttt{inc} function,
+it also has the effect that the variable will be shared by threads running the same function.

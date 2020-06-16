@@ -1,0 +1,20 @@
+\section{Lock-Free Synchronization}
+
+\subsection{Progress Conditions}
+\paragraph{Obstruction Freedom}
+At any point a single thread executed in isolation will complete its operation in a bounded number of steps.
+All lock-free algorithms are obstruction-free.
+
+This approach is the simplest one however it is too weak to guarantee progress.
+
+\paragraph{Lock Freedom}
+When the program threads are run sufficiently long, at least one of the threads makes progress
+(for a sensible definition of progress).
+
+In most cases it is strong enough,
+while more complex than an obstruction free approach it is simpler than wait free approaches.
+With limited contention it will behave as wait free.
+
+\paragraph{Wait Freedom}
+Every operation has a bounded number of steps the algorithm will take before the operation completes.
+Being the stronger approach it is also the most complex.

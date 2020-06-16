@@ -1,0 +1,86 @@
+\section{Deadlocks}
+
+Deadlocks happen when processes wait on each other,
+this can be expressed as a cycle in a task dependency graph.
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        % \draw (-2,-1) grid (2, 1);
+        \node at (-2, 1.5) {Thread $1$};
+        \node at (2, 1.5) {Thread $2$};
+        \node [rectangle, draw, font=\ttfamily, name=th1_a] at (-2, 1) {AcquireLock(A)};
+        \node [rectangle, draw, font=\ttfamily, name=th1_b] at (-2, -0.5) {AcquireLock(B)};
+        \node [rectangle, draw, font=\ttfamily, name=th2_b] at (2, 1) {AcquireLock(B)};
+        \node [rectangle, draw, font=\ttfamily, name=th2_a] at (2, -0.5) {AcquireLock(A)};
+        \draw [->] (th1_a) -- (th2_b);
+        \draw [->] (th1_b) -- (th2_a);
+        \draw [->] (th2_a) -- (th1_a);
+        \draw [->] (th2_b) -- (th1_b);
+        \draw [densely dashed] (0, 1.5) -- (0, -1);
+    \end{tikzpicture}
+    \caption{Deadlock dependency graph.}
+    \label{fig:deadlock}
+\end{figure}
+
+\subsection{System Model}
+\begin{itemize}
+    \item We have a finite number of resources.
+    \item Resources are organized into classes.
+    \item Processes compete for accessing resources.
+    \item If a process requests an instance of a resource class,
+    any instance of that class must satisfy the process.
+\end{itemize}
+
+\subsection{Resource Usage Protocol}
+\begin{itemize}
+    \item \textbf{Request} - the process either gets an instance of the resource immediately or waits until one is available.
+    \item \textbf{Use} - the process can operate on its resource instance.
+    \item \textbf{Release} - the process releases its resource instance.
+\end{itemize}
+
+\subsection{Deadlock Definition}
+\paragraph{Informal Definition}
+A set of two or more processes are deadlocked if:
+\begin{itemize}
+    \item They are blocked.
+    \item Each is holding a resource.
+    \item Each is waiting to acquire a resource held by another process in the set.
+\end{itemize}
+\paragraph{Formal Definition}
+In a formal way the conditions necessary for a deadlock are the following:
+\begin{itemize}
+    \item \textbf{Mutual Exclusion} - only one process can use a resource at a time.
+    \item \textbf{Hold \& Wait} - a process holding at least one resource is waiting to acquire additional resources which are currently held by other processes.
+    \item \textbf{No Preemption} - a resource can only be released voluntarily by the process holding it.
+    \item \textbf{Circular Wait} - a cycle of process requests exists ($P_0 \rightarrow P_1 \rightarrow \dots P_{n-1} \rightarrow P_0$).
+\end{itemize}
+
+\subsection{Deadlock Prevention}
+Restrict the way requests can be made.
+
+\paragraph{Mutual Exclusion}
+Not required for shared resources, however it must hold for non-shareable files.
+
+\paragraph{Hold \& Wait}
+Must guarantee that whenever a process requests a resource, it does not hold any other resources.
+Require the process to request and allocate all its resources before it begins execution.
+Low resource utilization; possibly resulting in starvation.
+
+\paragraph{No Preemption}
+If a process that is holding some resources requests another resource that cannot be immediately allocated to it,
+then all resources currently being held are released.
+Preempted resources are added to the list of resources for which the process is waiting.
+Process will be restarted only when it can regain its old resources, as well as the new ones that it is requesting.
+
+\paragraph{Circular Wait}
+Impose a total ordering of all resource types, requiring that each process requests resources in an increasing order of enumeration.
+
+\subsection{Deadlock Avoidance}
+
+Requires the system to have some additional \textit{à priori} information available.
+\begin{itemize}
+    \item Requires that each process declare the maximum number of resources of each type that it may need.
+    \item The deadlock-avoidance algorithm dynamically examines the resource-allocation state to ensure that there can never be a circular-wait condition.
+    \item Resource-allocation state is defined by the number of available and allocated resources and the maximum demands of the processes.
+\end{itemize}

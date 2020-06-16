@@ -1,0 +1,28 @@
+\section{Locking Strategies}
+
+\subsection{Coarse-Grained Synchronization}
+Simple approach, use a single lock,
+methods are always executed in mutual exclusion,
+eliminating all concurrency within the object.
+
+This approach wastes resources, for example,
+if there exists two objects and three threads,
+whenever an object is being used the other threads cannot use the other.
+
+This approach causes false conflicts, only works under fault-free scenarios
+and "reverts" the system into a sequential system.
+
+\subsection{Fine-Grained Synchronization}
+Split the object unto multiple independently-synchronized components.
+
+\subsection{Optimistic Synchronization}
+Check if the operation can be done,
+if the operation can be done, lock and recheck if the operation can still be done.
+
+While this strategy is cheaper than hand-over-hand locking it is not starvation free and mistakes are expensive as safety may be compromised.
+
+\subsection{Lazy Synchronization}
+Make common operations fast and delay the hard work.
+Separate the complex operations into two phases,
+logical, marking the component,
+and physical, actually executing the operation.

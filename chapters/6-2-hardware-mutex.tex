@@ -137,3 +137,23 @@ it does not provide fairness, meaning that we may wait for a long time until we 
 
 Let $X$ be a shared register, the primitive \texttt{fecth\&add} will atomically increment the register $X$ and return the new value.
 There are a couple of variants of this primitive in which the value return is the previous or the incremented value is not $1$ but rather passed as an argument.
+
+\begin{lstlisting}[
+    caption=Acquire Mutex Operation.
+]
+fn acquire_mutex(i) {
+    my_turn = TICKET.fetch&add();
+    while(NEXT != my_turn) { }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[
+    caption=Release Mutex Operation.
+]
+fn release_mutex(i) {
+    NEXT = NEXT + 1;
+}
+\end{lstlisting}
+
+While the \texttt{release\_mutex} is not atomic,
+there is no problem since only one process will execute \texttt{release\_mutex}.
