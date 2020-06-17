@@ -1,0 +1,62 @@
+\section{Gustafson-Barsis’ Law}
+
+\newthought{...speedup should be measured by scaling the
+    problem to the number of processors, not by fixing
+    the problem size. - John Gustafson}
+
+Also denominated as Scaled Speedup, it is interested in larger problems when scaling.
+In other words, for the same time, how much more work can we do?
+
+Considering $a$ the non-parallelizable part and $b$ as the parallelizable part,
+we calculate $T_P$, for $P$ processors, as follows:
+\begin{equation}
+    \begin{split}
+        T_P & = a + P \cdot b\\
+        T_1 & = a + 1 \cdot b\\
+        & = a + b
+    \end{split}
+\end{equation}
+
+Given that the wall-clock execution time is always the same,
+the scaled speedup is calculated on the volume of data processed.
+
+\begin{equation}
+    \begin{split}
+        S_P & \le \frac{T_P}{T_1}\\
+        & \le \frac{a + P \cdot b}{a + b}
+    \end{split}
+\end{equation}
+
+Consider $\alpha = \frac{a}{a+b}$ as the sequential fraction of the parallel execution time.
+We can then define the scaled speedup as follows:
+
+\begin{equation}
+    \begin{split}
+        S_P & \le \alpha + P \cdot (1-\alpha)\\
+        & \le P - \alpha \cdot (P-1)
+    \end{split}
+\end{equation}
+
+\paragraph{Scalability}
+The ability of a parallel algorithm to achieve performance gains proportional to the number of processors and the size of the problem.
+
+\paragraph{Application}
+
+The Gustafson’s law applies under the following scenarios:
+\begin{itemize}
+    \item When the problem size can increase.
+    \item When the number of processors increases.
+    \item Speedup function include the number of processors.
+    \item Can maintain or increase parallel efficiency as the problem scales.
+\end{itemize}
+
+\paragraph{Example} An application executing on $64$ processors spends $5\%$ of the total time on non-parallelizable computations.
+What is the scaled speedup?
+
+\begin{equation}
+    \begin{split}
+        S_64 & \le P - \alpha \cdot (P-1)\\
+        & \le 64 - 0.05 \cdot (64 - 1)\\
+        & \le 60.85
+    \end{split}
+\end{equation}

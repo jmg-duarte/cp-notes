@@ -1,0 +1,48 @@
+\section{Amdahl's Law}
+
+Amdahl's law fixes the problem size and varies the number of processors,
+hence the denomination of Fixed Size Speedup.
+The law relates at the reduction of the execution time.
+Let $f$ be the sequential fraction of a program, $1-f$ is the part that can be parallelized.
+
+\begin{equation}
+    \begin{split}
+        S_p & \le \frac{T_1}{T_p} = \frac{T_1}{(f \cdot T_1) + \frac{(1_f)T_1}{p}}\\
+        S_p & \le \frac{1}{f + \frac{1-f}{p}}\\
+        S_{p \leadsto \infty} & \le \frac{1}{f}
+    \end{split}
+\end{equation}
+
+\paragraph{Scalability}
+When considering scalability, Amdahl's law refers to the abillity of a parallel algorithm to achieve performance gains proportional to the number of processors and the size of the problem.
+
+\paragraph{Application}
+
+Amdahl's law is applicable under the following circumstances:
+\begin{itemize}
+    \item When the problem size is fixed.
+    \item Strong scaling ($p\rightarrow\infty$, $S_p = S_{\infty} \rightarrow \frac{1}{f}$).
+    \item Speedup bound is determined by the degree of sequential execution time in the computation.
+\end{itemize}
+
+\paragraph{Example}
+
+If $90\%$ of the computation can be parallelized, what is the maximum speedup achievable using 8 processors?
+
+We first calculate the sequential part of the program:
+
+\begin{equation*}
+    \begin{split}
+        0.9 & = 1 - f\\
+        f & = 0.1
+    \end{split}
+\end{equation*}
+
+And then apply Amdahl's law:
+
+\begin{equation*}
+    \begin{split}
+        S_8 & \le \frac{1}{0.1 + \frac{1-0.1}{8}}\\
+        S_8 & \le 4.7
+    \end{split}
+\end{equation*}
