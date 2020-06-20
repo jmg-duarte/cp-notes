@@ -1,20 +1,20 @@
-\section{Data Races}
+\subsection{Data Races}
 Code is supposed to be executed atomically since there are multiple dependent instructions manipulating the same data.
 This creates the possibility to several possible interleavings.
 
 \begin{lstlisting}[caption=Deposit Operation.]{}
 void Bank::Deposit(int amount)
 {
-    int balance = getBalance();
-    setBalance(balance + amount);
+  int balance = getBalance();
+  setBalance(balance + amount);
 }
 \end{lstlisting}
 
 \begin{lstlisting}[caption=Withdraw Operation.]{}
 void Bank::Withdraw()
 {
-    int balance = getBalance();
-    setBalance(balance - amount);
+  int balance = getBalance();
+  setBalance(balance - amount);
 }
 \end{lstlisting}
 
@@ -24,7 +24,7 @@ this happens because a thread (Thread $1$) may read the balance,
 then the other thread (Thread $2$) will update it,
 when Thread $1$ continues the balance value it has is now outdated.
 
-\subsection{Data Race Detection}
+\subsubsection{Data Race Detection}
 
 Data race detection may be executed by static or dynamic analysis.
 Static analysis depends on compiler features and may report false positives.
@@ -34,10 +34,10 @@ Dynamic analysis happens at runtime, all reported data races, are data races.
 The Happens-Before algorithm defines a partial order for events in a set of concurrent threads.
 In a single thread, happens-before reflects the temporary order of event occurrence.
 Between threads, $A$ happens before $B$ if $A$ is an unlock access in one threads
-and $B$ is a lock access in a different thread\sidenote{Data races between threads are possible if accesses to shared variables are not ordered.}.
+and $B$ is a lock access in a different thread\footnote{Data races between threads are possible if accesses to shared variables are not ordered.}.
 
 \begin{equation}
-    \mathnormal{if}\left(a = \mathtt{unlock(mu)} \wedge b = \mathtt{lock(mu)}\right) \Rightarrow a \rightarrow b
+  \mathnormal{if}\left(a = \mathtt{unlock(mu)} \wedge b = \mathtt{lock(mu)}\right) \Rightarrow a \rightarrow b
 \end{equation}
 
 \paragraph{Lock-Set Algorithm}
@@ -47,8 +47,8 @@ This algorithm does not check for data races but rather for a consistent lock di
 The algorithm defines two data structures, \texttt{LocksHeld(t)}, the set of locks currently held by the thread $t$ and
 \texttt{LockSet(x)}, the set of locks that could potentially be protecting variable $x$.
 \begin{itemize}
-    \item When thread $t$ acquires lock $l$ we have:$$\mathtt{LocksHeld(t)} = \mathtt{LocksHeld(t)} \cup \{l\}$$
-    \item When thread $t$ releases lock $l$ we have:$$\mathtt{LocksHeld(t)} = \mathtt{LocksHeld(t)} \setminus \{l\}$$
-    \item When thread $t$ accesses location $x$ we have:$$\mathtt{LockSet(x)} = \mathtt{LockSet(x)} \cap \mathtt{LocksHeld(t)}$$
+  \item When thread $t$ acquires lock $l$ we have:$$\mathtt{LocksHeld(t)} = \mathtt{LocksHeld(t)} \cup \{l\}$$
+  \item When thread $t$ releases lock $l$ we have:$$\mathtt{LocksHeld(t)} = \mathtt{LocksHeld(t)} \setminus \{l\}$$
+  \item When thread $t$ accesses location $x$ we have:$$\mathtt{LockSet(x)} = \mathtt{LockSet(x)} \cap \mathtt{LocksHeld(t)}$$
 \end{itemize}
 A data race is detected if \texttt{LockSet(x)} becomes empty.

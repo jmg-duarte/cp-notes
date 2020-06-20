@@ -1,22 +1,22 @@
-\chapter{Parallel Architectures}
+\section{Parallel Architectures}
 
-\section{Flynn's Taxonomy}
+\subsection{Flynn's Taxonomy}
 
-\subsection{Instruction Level}
+\subsubsection{Instruction Level}
 \begin{itemize}
     \item Single Instruction (SI) - System in which all processors execute the same instruction
     \item Multiple Instruction (MI) - System in which different processors execute may execute different instructions
 \end{itemize}
 
-\subsection{Data Level}
+\subsubsection{Data Level}
 \begin{itemize}
     \item Single Data (SD) - System in which all processors operate on the same data
     \item Multiple Data (MD) - System in which different processors may operate on different data
 \end{itemize}
 
-\subsection{Existing Architectures}
+\subsubsection{Existing Architectures}
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \begin{tabular}{c | c | c}
            & SD   & MD   \\
@@ -27,7 +27,7 @@
     \end{tabular}
     \caption{Possible processor architectures. MISD is the exception.}
     \label{fig:flynn}
-\end{figure}
+\end{figure}[h]
 
 \paragraph{SISD}
 The classic Von Neumann architecture, present in serial processors
@@ -60,20 +60,20 @@ MIMD architectures can be categorized under four designations, each with differe
     \end{tikzpicture}
     \caption{Uniform Memory Access (UMA). This architecture suffers from the need of synchronization among memory accesses. We can picture this as several CPUs accessing common RAM.}
     \label{fig:sm:uma}
-\end{figure}
+\end{figure}[h]
 
-\begin{figure}[h]
-    \centering
-    \begin{tikzpicture}
-        \draw (-5, -2) grid (5, 2);
-        \draw (-4.5, .5) rectangle (-.5, 1.5);
-        \draw [-] (-2.5, .5) -- (-2.5, 1.5);
-    \end{tikzpicture}
-    \caption{Non-Uniform Memory Access (NUMA). Common in distributed architectures.}
-    \label{fig:sm:numa}
-\end{figure}
+% \begin{figure}[h]
+%     \centering
+%     \begin{tikzpicture}
+%         \draw (-5, -2) grid (5, 2);
+%         \draw (-4.5, .5) rectangle (-.5, 1.5);
+%         \draw [-] (-2.5, .5) -- (-2.5, 1.5);
+%     \end{tikzpicture}
+%     \caption{Non-Uniform Memory Access (NUMA). Common in distributed architectures.}
+%     \label{fig:sm:numa}
+% \end{figure}[h]
 
-\section{Software Taxonomies}
+\subsection{Software Taxonomies}
 
 Applying Flynn's taxonomy to software we observe the following patterns.
 
@@ -82,11 +82,11 @@ Applying Flynn's taxonomy to software we observe the following patterns.
     \item Single Program, Multiple Data (SPMD) - A single program is run across multiple processing units (computers, processors, threads). Processing units execute the same code but do not work in lock-step.
 \end{itemize}
 
-\section{Memory}
+\subsection{Memory}
 
 Memory can be split into shared memory or distributed memory.
 
-\subsection{Shared Memory}
+\subsubsection{Shared Memory}
 
 Shared memory represents a global memory space, it is accessed by every processor.
 Each processor has a local cache (L1, L2, L3) which keep portions of the memory for faster access.
@@ -96,7 +96,7 @@ Shared memory is easier to program with, several frameworks are available (e.g. 
 Low latency for data sharing between tasks.
 However the programmer is responsible for synchronization, furthermore the memory access is non-uniform (NUMA) and accesses to global memory (RAM) can be a bottleneck.
 
-\subsection{Distributed Memory}
+\subsubsection{Distributed Memory}
 
 Memory is shared between processes using messages (OpenMPI), this allows to exploit distributed computing architectures in a cost effective way.
 

@@ -1,28 +1,31 @@
-\section{High-Level Data Races}
+\subsection{High-Level Data Races}
 
 Also known as high-level atomicity violations.
 This happens when seemingly atomic code has interleavings that lead to a data race.
 
 \begin{lstlisting}[caption={Class \texttt{Pair} definition, notice the synchronized methods.}]
 class Pair {
-    synchronized int getX() {
-        return pair.x:
-    }
+  synchronized int getX() {
+    return pair.x:
+  }
 
-    synchronized int getY() {
-        return pair.y:
-    }
+  synchronized int getY() {
+    return pair.y:
+  }
 
-    synchronized void setPair(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
+  synchronized void setPair(
+    int x,
+    int y
+  ) {
+    this.x = x;
+    this.y = y;
+  }
 
-    boolean areEqual() {
-        int x = this.getX(); // synchronized
-        int y = this.getY(); // synchronized
-        return x == y;
-    }
+  boolean areEqual() {
+    int x = this.getX(); // synchronized
+    int y = this.getY(); // synchronized
+    return x == y;
+  }
 }
 \end{lstlisting}
 
@@ -37,38 +40,38 @@ setPair(x', y');
 getY(); // y is now y'
 \end{lstlisting}
 
-\subsection{Stale-Value Errors}
+\subsubsection{Stale-Value Errors}
 
 Stale-Value errors are caused by the privatization of data.
 
 \begin{lstlisting}[caption={Stale-Value error example.}]
 void setYToXTimesTwo() {
-    int x = getX();
-    setY(2 * x); // x may have changed
+  int x = getX();
+  setY(2 * x); // x may have changed
 }
 
 @Atomic
 synchronized int getX() {
-    return x;
+  return x;
 }
 
 @Atomic
 synchronized int setY(int y) {
-    this.y = y;
+  this.y = y;
 }
 \end{lstlisting}
 
-\subsection{Detecting High-Level Data Races}
+\subsubsection{Detecting High-Level Data Races}
 
 A view of an atomic block $B$, named $V(B)$, is the set of variables accessed inside the atomic code block $B$.
 We can define a \textit{read view} of $B$ as $V_{R}(B)$ as the set of variables read inside the atomic code block $B$.
 Analogously the \textit{write view} of $B$, $V_{W}(B)$ is the set of variables written inside the atomic code block $B$.
 
 \begin{lstlisting}[caption={
-    The \texttt{getX} has the read view $V_{R}(\mathtt{getX}) = \{\mathtt{x}\}$ and the write view $V_{W}(\mathtt{getX}) = \{\}$.
+  The \texttt{getX} has the read view $V_{R}(\mathtt{getX}) = \{\mathtt{x}\}$ and the write view $V_{W}(\mathtt{getX}) = \{\}$.
 }]
 public int getX() {
-    return this.x;
+  return this.x;
 }
 \end{lstlisting}
 
@@ -79,17 +82,17 @@ There is a direct correlation between a read variable $x$ and a written variable
 There is a common correlation between read variables $x$ and $y$ if,
 in a dependency graph $D$, there is a written variable $z$ such that:
 \begin{equation*}
-    z \neq x, z \neq y : \exists \left(x \rightarrow z, y \rightarrow z\right)
+  z \neq x, z \neq y : \exists \left(x \rightarrow z, y \rightarrow z\right)
 \end{equation*}
 
 Example of an high-level data race detection:
 
 \begin{equation}
-    \begin{split}
-        V_{max}(T_1) & = \{x, y\} \\
-        V_{max}(T_2) & = \{x\}, \{y\} \\
-        V_A & = V_{max}(T_1) \cap \{x\} \\
-        V_B & = V_{max}(T_1) \cap \{y\} \\
-        V_A \nsubseteq V_B & \wedge V_B \nsubseteq V_A
-    \end{split}
+  \begin{split}
+    V_{max}(T_1) & = \{x, y\} \\
+    V_{max}(T_2) & = \{x\}, \{y\} \\
+    V_A & = V_{max}(T_1) \cap \{x\} \\
+    V_B & = V_{max}(T_1) \cap \{y\} \\
+    V_A \nsubseteq V_B & \wedge V_B \nsubseteq V_A
+  \end{split}
 \end{equation}

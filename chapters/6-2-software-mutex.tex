@@ -1,0 +1,173 @@
+
+
+\subsection{Solving Mutual Exclusion - Software Level}
+
+This discusses how to solve mutual exclusion from a software point of view.
+
+\subsubsection{Atomic Read/Write Registers}
+
+An atomic shared register satisfies the following properties:
+\begin{itemize}
+    \item Each invocation $op$ of a \texttt{read} or \texttt{write} operation:
+    \begin{itemize}
+        \item Appears as if it was executed at a single point $T(op)$ of the timeline.
+        \item $T(op)$ is such that $T_{start}(op) \le T(op) \le T_{end}(op)$
+        \item For any two operation invocations $\mathnormal{op}_1$ and $\mathnormal{op}_2$ we have that
+        $\mathnormal{op}_1 \neq \mathnormal{op}_1 \Rightarrow T(\mathnormal{op}_1) \neq T(\mathnormal{op}_1)$.
+    \end{itemize}
+    \item Each read invocation returns the value written by the closest preceding write invocation in the sequence defined by the $T(\dots)$ instants associated with the operation invocations.
+\end{itemize}
+
+\subsubsection{After You}
+
+We assume there are only two processes trying to access the critical region.
+
+\begin{lstlisting}[
+    caption=Acquire Mutex Operation.
+]
+fn acquire_mutex(i) {
+  AFTER_YOU = i;
+  wait(AFTER_YOU != i);
+}
+\end{lstlisting}
+
+\begin{lstlisting}[
+    caption=Release Mutex Operation.
+]
+fn release_mutex(i) { }
+\end{lstlisting}
+
+While this approach provides mutual exclusion, it does not guarantee progress.
+Furthermore this approach can cause starvation, for example,
+if process $p_0$ tries to access the critical region and the other process $p_1$ is busy,
+$p_0$ will not be able to access the critical region since the variable \texttt{AFTER\_YOU} will not change.
+
+\subsubsection{Flag Array}
+
+\begin{lstlisting}[
+    caption=Acquire Mutex Operation.
+]
+fn acquire_mutex(i) {
+  FLAG[i] = up;
+  wait(FLAG[j] == down);
+}
+\end{lstlisting}
+
+\begin{lstlisting}[
+    caption=Release Mutex Operation.
+]
+fn release_mutex(i) {
+  FLAG[i] = down;
+}
+\end{lstlisting}
+
+This approach provides mutual exclusion, however, once again it does not guarantee progress as it may cause a deadlock\footnote{A \textit{deadlock} happens when two processes are waiting on each other.}.
+As we can see in \autoref{eq:interleaving}, if both processes are able to put their flag to \texttt{up} they will be waiting for each other indefinitely.
+\begin{equation}\label{eq:interleaving}
+    \begin{split}
+        p_0 & \rightarrow \mathtt{FLAG[0] = up}\\
+        p_1 & \rightarrow \mathtt{FLAG[1] = up}\\
+        p_0 & \rightarrow \mathtt{wait}\\
+        p_1 & \rightarrow \mathtt{wait}\\
+    \end{split}
+\end{equation}
+
+\subsubsection{Flag Array with Delayed Wait}
+
+\begin{lstlisting}[
+    caption=Acquire Mutex Operation.
+]
+fn acquire_mutex(i) {
+  FLAG[i] = up;
+  while (FLAG[j] == up) {
+    FLAG[i] = down:
+    sleep(random());
+    FLAG[i] = up;
+  }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[
+    caption=Release Mutex Operation.
+]
+fn release_mutex(i) {
+  FLAG[i] = down;
+}
+\end{lstlisting}
+
+This solution provides mutual exclusion but is not able to guarantee progress as well.
+However only in specific cases where the processes are synchronized and the result from the \texttt{random()} call is consistently the same for both processes the program will be stuck,
+creating a livelock\footnote{A livelock is similar to a deadlock, except that the states of the processes involved in the livelock constantly change with regard to one another, none progressing.}.
+
+This solution may also suffer from starvation,
+in the case that a process $p_0$ acquires the mutex and $p_1$ is waiting,
+it is possible for $p_0$ to release and re-acquire the mutex without $p_1$ getting access.
+
+\subsubsection{Mixed Approach}\label{sec:mixed}
+
+Just like the previous schemes,
+this one is also applicable for two processes only.
+
+
+\begin{lstlisting}[
+    caption=Acquire Mutex Operation.
+]
+fn acquire_mutex(i) {
+  FLAG[i] = up;
+  AFTER_YOU = i;
+  wait(
+    FLAG[j] == down ||
+    AFTER_YOU != i
+  );
+}
+\end{lstlisting}
+
+\begin{lstlisting}[
+    caption=Release Mutex Operation.
+]
+fn release_mutex(i) {
+  FLAG[i] = down;
+}
+\end{lstlisting}
+
+By mixing the previous approaches we are able to achieve progress,
+since even if both flags are \texttt{up} the \texttt{AFTER\_YOU} variable will make one proceed to the critical region.
+While this solution provides mutual exclusion and progress,
+it will only work for two processes.
+
+\subsubsection{Mixed Approach for N processes}
+
+\begin{lstlisting}[
+    caption=Acquire Mutex Operation.
+]
+fn acquire_mutex(i) {
+  for idx in 1 to (n-1) {
+    FLAG_LEVEL[i] = idx;
+    AFTER_YOU[idx] = i;
+    wait(
+      forall k != i :
+      FLAG_LEVEL[k] < idx ||
+      AFTER_YOU[idx] != i
+    );
+  }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[
+    caption=Release Mutex Operation.
+]
+fn release_mutex(i) {
+  FLAG_LEVEL[i] = 0;
+}
+\end{lstlisting}
+
+This approach generalizes the one described in \autoref{sec:mixed},
+allowing for $N$ processes to use the mutex.
+The intuition behind it so that whenever $n$ processes try to access the critical region,
+they will go through $n-1$ levels, the process reaching the last one will gain access to the region.
+
+$p_i$ is allowed to progress to level $idx + 1$ if, from its point of view, one of the following is true:
+\begin{itemize}
+    \item All other processes are at a lower level ($\forall k \neq i : \mathtt{FLAG\_LEVEL[k] < idx}$).
+    \item It was not the last one to enter the level $idx$ ($\mathtt{AFTER\_YOU[idx]} \neq i$).
+\end{itemize}

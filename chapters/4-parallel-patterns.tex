@@ -1,17 +1,17 @@
-\chapter{Parallel Patterns}
+\section{Parallel Patterns}
 
 A parallel pattern is a recurring combination of task distribution and data access that solves a specific design problem in parallel algorithm design.
 
-\section{Nesting Pattern}
+\subsection{Nesting Pattern}
 
 Nesting is the ability to hierarchically compose patterns.
 This pattern appears in both serial and parallel algorithms.
 
 It is a compositional pattern, allowing other patterns to be composed in such way that task blocks can be replaced with another pattern.
 
-\section{Control Patterns}
+\subsection{Control Patterns}
 
-\subsection{Serial Control Patterns}
+\subsubsection{Serial Control Patterns}
 
 Structured serial programming is based on following patterns.
 
@@ -30,7 +30,7 @@ This repeats until $c$ is false.
 \paragraph{Recursion}
 Dynamic form of nesting allowing functions to call themselves.
 
-\subsection{Parallel Control Patterns}
+\subsubsection{Parallel Control Patterns}
 Parallel control patterns extend serial control patterns.
 Each parallel control pattern is related to at least one serial control pattern.
 
@@ -53,9 +53,9 @@ For every output in a collection, a reduction of the input up to that point is c
 \paragraph{Recurrence}
 More complex version of map, where loop iterations can depend on one another.
 
-\section{Data Management Patterns}
+\subsection{Data Management Patterns}
 
-\subsection{Serial Data Management Patterns}
+\subsubsection{Serial Data Management Patterns}
 
 \paragraph{Random Read \& Write}
 Memory locations indexed with addresses, used with pointers.
@@ -73,7 +73,7 @@ A parallelized allocator should be used when allocating memory in parallel.
 \paragraph{Objects}
 Objects are language constructs to associate data with code to manipulate and manage that data.
 
-\subsection{Parallel Data Management Patterns}
+\subsubsection{Parallel Data Management Patterns}
 
 \paragraph{Pack}
 Used to eliminate unused space in a collection.

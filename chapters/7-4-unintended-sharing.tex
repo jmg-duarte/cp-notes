@@ -1,11 +1,11 @@
-\section{Unintended Sharing}
+\subsection{Unintended Sharing}
 
 This happens when state is shared between processes unintentionally.
 
 \begin{lstlisting}[caption={Example of unintended sharing.}]
 void inc() {
-    static int local = 0;
-    local += 1;
+  static int local = 0;
+  local += 1;
 }
 \end{lstlisting}
 

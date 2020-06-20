@@ -1,4 +1,4 @@
-\chapter{Parallel Programming}
+\section{Parallel Programming}
 
 Parallel programs often start as sequential programs.
 This approach has the advantage of having a previous codebase to validate the new approach,
@@ -10,14 +10,14 @@ to do so we first identify the hotspots with a profiler.
 The parallelization process starts with the hotspots,
 applying small changes with testing in-between.
 
-\section{Finding Concurrency}
+\subsection{Finding Concurrency}
 
 The first step in parallelizing a candidate program is to find concurrency,
 in other words, we have to find tasks that can be executed at the same time.
 
 To do so, we need to consider flexibility, efficiency and simplicity.
 
-\subsection{Task Decomposition Guidelines}
+\subsubsection{Task Decomposition Guidelines}
 
 \paragraph{Flexibility}
 The program design should afford flexibility in the number and size of the tasks generated.
@@ -29,7 +29,7 @@ furthermore, they should be sufficiently independent so that managing dependenci
 \paragraph{Simplicity}
 The code must remain as simple and readable as possible so as to be debuggable and quick to understand and modify.
 
-\subsection{Data Decomposition Guidelines}
+\subsubsection{Data Decomposition Guidelines}
 
 Often implied by task decomposition,
 data decomposition is a good starting point when the main computation is organized around manipulation of large data structures
@@ -44,7 +44,7 @@ Data chunks should generate considerable amounts of work to minimize the communi
 \paragraph{Simplicity}
 Complex data compositions can get difficult to manage and debug.
 
-\section{Algorithmic Structure Design Space}
+\subsection{Algorithmic Structure Design Space}
 
 The high level approach of an algorithm can be split in to three possibilities, all approaches can then be split into two sub approaches,
 the linear or recursive approach.
@@ -55,9 +55,9 @@ the linear or recursive approach.
     \item Organize by Data Flow - the linear solution is to make use of the pipeline pattern, the recursive approach is based on event coordination.
 \end{itemize}
 
-\section{Implementation Environment}
+\subsection{Implementation Environment}
 
-\subsection{Program Structures}
+\subsubsection{Program Structures}
 
 \paragraph{Single Program Multiple Data}
 In the SMPD approach all tasks execute the same program in parallel but each has its own set of data.

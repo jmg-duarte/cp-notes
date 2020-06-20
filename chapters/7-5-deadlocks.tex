@@ -1,9 +1,9 @@
-\section{Deadlocks}
+\subsection{Deadlocks}
 
 Deadlocks happen when processes wait on each other,
 this can be expressed as a cycle in a task dependency graph.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \begin{tikzpicture}
         % \draw (-2,-1) grid (2, 1);
@@ -21,9 +21,9 @@ this can be expressed as a cycle in a task dependency graph.
     \end{tikzpicture}
     \caption{Deadlock dependency graph.}
     \label{fig:deadlock}
-\end{figure}
+\end{figure}[h]
 
-\subsection{System Model}
+\subsubsection{System Model}
 \begin{itemize}
     \item We have a finite number of resources.
     \item Resources are organized into classes.
@@ -32,14 +32,14 @@ this can be expressed as a cycle in a task dependency graph.
     any instance of that class must satisfy the process.
 \end{itemize}
 
-\subsection{Resource Usage Protocol}
+\subsubsection{Resource Usage Protocol}
 \begin{itemize}
     \item \textbf{Request} - the process either gets an instance of the resource immediately or waits until one is available.
     \item \textbf{Use} - the process can operate on its resource instance.
     \item \textbf{Release} - the process releases its resource instance.
 \end{itemize}
 
-\subsection{Deadlock Definition}
+\subsubsection{Deadlock Definition}
 \paragraph{Informal Definition}
 A set of two or more processes are deadlocked if:
 \begin{itemize}
@@ -56,7 +56,7 @@ In a formal way the conditions necessary for a deadlock are the following:
     \item \textbf{Circular Wait} - a cycle of process requests exists ($P_0 \rightarrow P_1 \rightarrow \dots P_{n-1} \rightarrow P_0$).
 \end{itemize}
 
-\subsection{Deadlock Prevention}
+\subsubsection{Deadlock Prevention}
 Restrict the way requests can be made.
 
 \paragraph{Mutual Exclusion}
@@ -76,7 +76,7 @@ Process will be restarted only when it can regain its old resources, as well as 
 \paragraph{Circular Wait}
 Impose a total ordering of all resource types, requiring that each process requests resources in an increasing order of enumeration.
 
-\subsection{Deadlock Avoidance}
+\subsubsection{Deadlock Avoidance}
 
 Requires the system to have some additional \textit{à priori} information available.
 \begin{itemize}

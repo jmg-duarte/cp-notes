@@ -1,11 +1,11 @@
 
-\section{Computational DAG}
+\subsection{Computational DAG}
 
 A parallel program maybe be represented as a directed acyclic graph (DAG),
 this graph has several properties, such as the span,
 which can be used to evaluate the potential performance of an algorithm.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \begin{tikzpicture}
         \node[name=a, draw, circle, minimum size=0.75cm] at (0,0) {A};
@@ -16,10 +16,10 @@ which can be used to evaluate the potential performance of an algorithm.
     \end{tikzpicture}
     \caption{Serial Composition}
     \label{fig:dag:serial}
-\end{figure}
+\end{figure}[h]
 
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \begin{tikzpicture}
         \node[name=a, draw, circle, minimum size=0.75cm] at (0,0) {A};
@@ -31,7 +31,7 @@ which can be used to evaluate the potential performance of an algorithm.
     \end{tikzpicture}
     \caption{Parallel Composition}
     \label{fig:dag:parallel}
-\end{figure}
+\end{figure}[h]
 
 \paragraph{Work}
 
@@ -66,7 +66,7 @@ The span is different when comparing $T_1$ and $T_P$.
     \end{split}
 \end{equation}
 
-\subsection{Speedup}
+\subsubsection{Speedup}
 
 The speedup on $P$ processors is given by:
 
@@ -78,7 +78,7 @@ If $\frac{T_1}{T_P} = P$ we have \textit{linear} speedup.
 When $\frac{T_1}{T_P} \ge P$ we have \textit{superlinear} speedup,
 this however is not possible due to the work law (\autoref{eq:work_law}).
 
-\subsection{Parallelism}
+\subsubsection{Parallelism}
 
 Parallelism can be defined as the average amount of work per step along the span, that is:
 
@@ -86,7 +86,7 @@ Parallelism can be defined as the average amount of work per step along the span
     \frac{T_1}{T_\infty}
 \end{equation}
 
-\subsection{Work-Span Model}
+\subsubsection{Work-Span Model}
 
 Considers a greedy scheduler, that is,
 no worker is idle while there are tasks to execute.

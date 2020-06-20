@@ -1,21 +1,29 @@
-\documentclass[a4paper]{tufte-handout}
+\documentclass[a4paper, twocolumn]{article}
+\setlength{\columnsep}{.5cm}
+\usepackage{geometry}
+\geometry{
+    top=10mm,
+    left=10mm,
+    right=10mm,
+    bottom=20mm,
+    heightrounded
+}
+
+\usepackage{listings}
+\lstdefinestyle{style}{
+    basicstyle=\ttfamily,
+    captionpos=b,
+    frame=tlrb,
+}
+\lstset{style=style}
 
 \usepackage[utf8]{inputenc}
 \usepackage{tikz}
 \usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{listings}
 
-\lstdefinestyle{style}{
-    basicstyle=\ttfamily,
-    numbers=left,
-    numberstyle=\small\ttfamily,
-    captionpos=b,
-    frame=tlrb,
-}
-\lstset{style=style}
-
+\author{José Duarte}
 \title{CP Course Notes}
 
 \begin{document}
@@ -27,6 +35,4 @@
 \input{chapters/5-parallel-models}
 \input{chapters/6-synchronization}
 \input{chapters/7-concurrency-errors}
-\bibliography{bibliography} % Use the bibliography.bib file for the bibliography
-\bibliographystyle{plainnat} % Use the plainnat style of referencing
 \end{document}

@@ -1,6 +1,6 @@
-\section{Solving Mutual Exclusion - Hardware Level}
+\subsection{Solving Mutual Exclusion - Hardware Level}
 
-\subsection{The \texttt{test\&set} \& \texttt{reset} primitives}
+\subsubsection{The \texttt{test\&set} \& \texttt{reset} primitives}
 
 Consider that both primitives are atomic and $X$ is a shared register initialized to $1$.
 \begin{itemize}
@@ -9,30 +9,30 @@ Consider that both primitives are atomic and $X$ is a shared register initialize
 \end{itemize}
 
 \begin{lstlisting}[
-    caption=Acquire Mutex Operation.
+  caption=Acquire Mutex Operation.
 ]
 fn acquire_mutex(i) {
-    while (r != 1) {
-        r = X.test&set();
-    }
+  while (r != 1) {
+    r = X.test&set();
+  }
 }
 \end{lstlisting}
 
 \begin{lstlisting}[
-    caption=Release Mutex Operation.
+  caption=Release Mutex Operation.
 ]
 fn release_mutex(i) {
-    X.reset();
+  X.reset();
 }
 \end{lstlisting}
 
 The implementation is based on the following invariant:
 
 \begin{equation*}
-     X + \sum_{i=1}^{n} r_i = 1
+    X + \sum_{i=1}^{n} r_i = 1
 \end{equation*}
 
-\subsection{The \texttt{swap} primitive}
+\subsubsection{The \texttt{swap} primitive}
 
 Consider a shared register $X$,
 the \texttt{swap(v)} primitive will assign $v$ to $X$
@@ -43,21 +43,21 @@ We can think of the previous instructions,
 respectively, \texttt{swap(0)} and \texttt{swap(1)}.
 
 \begin{lstlisting}[
-    caption=Acquire Mutex Operation.
+  caption=Acquire Mutex Operation.
 ]
 fn acquire_mutex(i) {
-    r = 0;
-    while (r != 1) {
-        r = X.swap(r);
-    }
+  r = 0;
+  while (r != 1) {
+    r = X.swap(r);
+  }
 }
 \end{lstlisting}
 
 \begin{lstlisting}[
-    caption=Release Mutex Operation.
+  caption=Release Mutex Operation.
 ]
 fn release_mutex(i) {
-    X.swap(r);
+  X.swap(r);
 }
 \end{lstlisting}
 
@@ -65,19 +65,19 @@ The invariant from \texttt{test\&set} applies to \texttt{swap} as well.
 Since this approach is just a re-implementation of the previous ones with a different instruction,
 it offers the same guarantees.
 
-\subsection{The \texttt{compare\&swap} primitive}
+\subsubsection{The \texttt{compare\&swap} primitive}
 
 Let $X$ be a shared register and \texttt{old} and \texttt{new} be two values.
 The \texttt{compare\&swap} primitive returns a boolean value and may be defined as follows:
 
 \begin{lstlisting}[caption=\texttt{compare\&swap} implementation.]
 fn compare&swap(old, new) {
-    if (X == old) {
-        X = new;
-        return true;
-    } else {
-        return false;
-    }
+  if (X == old) {
+    X = new;
+    return true;
+  } else {
+    return false;
+  }
 }
 \end{lstlisting}
 
@@ -87,71 +87,71 @@ Consider $X$ to be an atomic register initialized to $1$,
 implementing mutual exclusion with \texttt{compare\&swap} we have.
 
 \begin{lstlisting}[
-    caption=Acquire Mutex Operation.
+  caption=Acquire Mutex Operation.
 ]
 fn acquire_mutex(i) {
-    while (r != 1) {
-        r = X.compare&swap(1, 0);
-    }
+  while (r != 1) {
+    r = X.compare&swap(1, 0);
+  }
 }
 \end{lstlisting}
 
 \begin{lstlisting}[
-    caption=Release Mutex Operation.
+  caption=Release Mutex Operation.
 ]
 fn release_mutex(i) {
-    X = 1;
+  X = 1;
 }
 \end{lstlisting}
 
 This and the previous algorithms are not starvation free.
 
-\subsection{Deadlock \& Starvation Free Algorithm}
+\subsubsection{Deadlock \& Starvation Free Algorithm}
 
 \begin{lstlisting}[
-    caption=Acquire Mutex Operation.
+  caption=Acquire Mutex Operation.
 ]
 fn acquire_mutex(i) {
-    FLAG[i] = up;
-    wait(TURN == i || FLAG[TURN] == down);
-    LOCK.acquire_lock(i);
+  FLAG[i] = up;
+  wait(TURN == i || FLAG[TURN] == down);
+  LOCK.acquire_lock(i);
 }
 \end{lstlisting}
 
 \begin{lstlisting}[
-    caption=Release Mutex Operation.
+  caption=Release Mutex Operation.
 ]
 fn release_mutex(i) {
-    FLAG[i] = down;
-    if (FLAG[TURN] == down) {
-        TURN = (TURN % n) + 1;
-    }
-    LOCK.release_lock();
+  FLAG[i] = down;
+  if (FLAG[TURN] == down) {
+    TURN = (TURN % n) + 1;
+  }
+  LOCK.release_lock();
 }
 \end{lstlisting}
 
 While this approach provides mutual exclusion, progress and no starvation,
 it does not provide fairness, meaning that we may wait for a long time until we acquire the lock.
 
-\subsection{The \texttt{fetch\&add} primitive}
+\subsubsection{The \texttt{fetch\&add} primitive}
 
 Let $X$ be a shared register, the primitive \texttt{fecth\&add} will atomically increment the register $X$ and return the new value.
 There are a couple of variants of this primitive in which the value return is the previous or the incremented value is not $1$ but rather passed as an argument.
 
 \begin{lstlisting}[
-    caption=Acquire Mutex Operation.
+  caption=Acquire Mutex Operation.
 ]
 fn acquire_mutex(i) {
-    my_turn = TICKET.fetch&add();
-    while(NEXT != my_turn) { }
+  my_turn = TICKET.fetch&add();
+  while(NEXT != my_turn) { }
 }
 \end{lstlisting}
 
 \begin{lstlisting}[
-    caption=Release Mutex Operation.
+  caption=Release Mutex Operation.
 ]
 fn release_mutex(i) {
-    NEXT = NEXT + 1;
+  NEXT = NEXT + 1;
 }
 \end{lstlisting}
 
