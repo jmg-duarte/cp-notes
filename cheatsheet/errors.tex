@@ -13,7 +13,7 @@
 First we go the maximum we can go in one side, until we find a precedence. Next we advance the minimum from the other side until our precedence is fulfilled.
 
 
-\includegraphics[width=0.1\textwidth]{ConcurrencyErrors/gRAPH.png}
+\includegraphics[width=0.1\textwidth]{concurrency-errors/gRAPH.png}
 
 \subsection{Common Concurrency Errors}
 
@@ -87,7 +87,7 @@ No warnings is equivalent to no data races on the current execution, but wanings
 
 \textbf{View Analysis} is composed by every variable read and written in a block of code.
 
-\includegraphics[width=0.20\textwidth]{ConcurrencyErrors/view.png}
+\includegraphics[width=0.20\textwidth]{concurrency-errors/view.png}
 
 \textbf{Casual Dependencies Graph}= Data Dependencies + Control Dependencies.\par
 
@@ -117,7 +117,7 @@ A set of two or more processes are deadlocked if:\par
     \item Each is waiting to acquire a resource held by another process in the set.
 \end{itemize}[]
 
-\includegraphics[width=0.1\textwidth]{ConcurrencyErrors/graphdeadlock.png}
+\includegraphics[width=0.1\textwidth]{concurrency-errors/graphdeadlock.png}
 
 \textbf{Condicions Necessary for Deadlock}\par
 \begin{itemize}
@@ -129,7 +129,7 @@ A set of two or more processes are deadlocked if:\par
 
 \subsection{Resource Allocation Graph}
 
-\includegraphics[width=0.1\textwidth]{ConcurrencyErrors/ressourcegraph.png}
+\includegraphics[width=0.1\textwidth]{concurrency-errors/ressourcegraph.png}
 
 If a graph contains no cycles -> No deadlock \par
 If a graph contains a cycle -> \par
@@ -159,24 +159,24 @@ Restrict the way requests can be made...\par
  process will be restarted only when it can regain its old resources, as well as the new ones that it is requesting.\par
  \textbf{Circular Wait}\par
  - impose a total ordering of all resources types, and require that each process requests reources in an increasing order of enumeration.
- 
+
  \subsection{Deadlock Avoidance}
- 
+
  Requires that the system has some additional a priori information available.\par
  - Requires that each process declares the maximum number of resources of each type that it may need\par
  - The deadlock-avoidance algorithm dynamically examines the resource-allocation state to ensure that there can never be a circular-wait condition.
  - Resource-allocation state is defined by the number of available and allocated resources, and the maximum demands of the processes.\par
- 
+
  \textbf{System is in safe state} if there exists a sequence of ALL the processes in the system such that for each Pi, the resources that Pi can be satisfied by currently available resource + resource's held by all the Pj, with j < i \par
- 
+
  If a system is in safe state -> no deadlocks\par
  If a system is in unsafe state -> possibility of deadlock\par
  Avoidance -> ensures that a system will never enter an unsafe state.
- 
- 
+
+
 \subsection{Avoidance Algorithms}
 
 Single instance of a resource type, use a resource-allocation graph\par
 Multiple instances of a resource type, use the bankers algorithm\par
 
-\includegraphics[width=0.20\textwidth]{ConcurrencyErrors/bankers.png}
+\includegraphics[width=0.20\textwidth]{concurrency-errors/bankers.png}
