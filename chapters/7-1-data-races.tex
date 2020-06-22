@@ -44,8 +44,11 @@ and $B$ is a lock access in a different thread\footnote{Data races between threa
 The algorithm may fail and the program still be data race free (false positives),
 this happens since the algorithm check a sufficient condition for data-race freedom.
 This algorithm does not check for data races but rather for a consistent lock discipline.
-The algorithm defines two data structures, \texttt{LocksHeld(t)}, the set of locks currently held by the thread $t$ and
-\texttt{LockSet(x)}, the set of locks that could potentially be protecting variable $x$.
+The algorithm defines two data structures, \texttt{LocksHeld(t)},
+the set of locks currently held by the thread $t$,
+which is initialized as $\mathtt{LocksHeld(t)} = \emptyset$,
+and \texttt{LockSet(x)}, the set of locks that could potentially be protecting variable $x$,
+initialized as $\mathtt{LockSet(t)} = \mathbb{U}$.
 \begin{itemize}
   \item When thread $t$ acquires lock $l$ we have:$$\mathtt{LocksHeld(t)} = \mathtt{LocksHeld(t)} \cup \{l\}$$
   \item When thread $t$ releases lock $l$ we have:$$\mathtt{LocksHeld(t)} = \mathtt{LocksHeld(t)} \setminus \{l\}$$
