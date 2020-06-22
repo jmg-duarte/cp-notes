@@ -84,3 +84,62 @@ Requires the system to have some additional \textit{à priori} information avail
     \item The deadlock-avoidance algorithm dynamically examines the resource-allocation state to ensure that there can never be a circular-wait condition.
     \item Resource-allocation state is defined by the number of available and allocated resources and the maximum demands of the processes.
 \end{itemize}
+
+\subsubsection{Deadlock Detection}
+
+\paragraph{Banker's Algorithm}
+In the banker's algorithm processes declare their maximum resource usage of each type of resource.
+This number should not exceed the total number of resources in the system.
+Whenever a process requests resources the system must determine if the allocation of such resources will leave the system in a safe state.
+If it does leave the system in a safe state, the resources are allocated, otherwise the process must wait until enough resources are available.
+
+Several data structures are required for the banker's algorithm,
+these data structures encode the resource-allocation state.
+In the following data structures, $n$ is the number of processes in the system and
+$m$ is the number of resource types.
+\begin{itemize}
+    \item \textbf{Available} - A vector of length $m$ indicates the number of available resources of each type.
+    If $\mathbf{Available}[j]$ equals $k$, then $k$ instances of resource type $R_i$ are available.
+    \item \textbf{Max} - An $n \times m$ matrix defines the maximum demand of each process.
+    If $\mathbf{Max}[i][j]$ equals $k$, then process $P_i$ may request at most $k$ instances of resource type $R_j$.
+    \item \textbf{Allocation} - An $n \times m$ matrix defines the number of resources of each type currently allocated to each process.
+    If $\mathbf{Allocation}[i][j]$ equals $k$, then process $P_i$ is currently allocated $k$ instances of resource type $R_j$
+    \item \textbf{Need} - An $n \times m$ matrix indicates the remaining resource need of each process.
+    If $\mathbf{Need}[i][j]$ equals $k$, then process $P_i$ may need $k$ more instances of resource type $R_j$ to complete its task.
+    Note that $\mathbf{Need}[i][j] = \mathbf{Max}[i][j] - \mathbf{Allocation}[i][j]$.
+\end{itemize}
+
+The \textit{safety check} algorithm works as follows:
+\begin{enumerate}
+    \item Let \textbf{Work} and \textbf{Finish} be vectors of length $m$ and $n$, respectively.
+    Initialize $\mathbf{Work} = \mathbf{Available}$ and $\mathbf{Finish} = false$ for $i = 0, 1, \dots, n - 1$.
+    \item Find an index $i$ such that both:
+    \begin{enumerate}
+        \item $\mathbf{Finish}[i] == false$
+        \item $\mathbf{Need}_i \le \mathbf{Work}$
+    \end{enumerate}
+    If no such $i$ exists, go to step 4.
+    \item $\mathbf{Work} = \mathbf{Work} + \mathbf{Allocation}_i$\\
+    $\mathbf{Finish}[i] = true$\\
+    Go to step 2.
+    \item If $\mathbf{Finish}[i] == true$ for all $i$, then the system is in a safe state.
+\end{enumerate}
+
+For the \textit{resource requesting} algorithm, let $\mathbf{Request}_i$ be the request vector for process $P_i$.
+If $\mathbf{Request}_i [j] == k$, then process $P_i$ wants $k$ instances of resource type $R_j$.
+The algorithm then works as follows:
+\begin{enumerate}
+    \item If $\mathbf{Request}_i \le \mathbf{Need}_i$, go to step 2.
+    Otherwise, raise an error condition, since the process has exceeded its maximum claim.
+    \item If $\mathbf{Request}_i \le \mathbf{Available}$, go to step 3.
+    Otherwise, $P_i$ must wait, since the resources are not available.
+    \item Have the system pretend to have allocated the requested resources to process $P_i$ by,
+    modifying the state as follows:\\
+    $\mathbf{Available} = \mathbf{Available} - \mathbf{Request}_i$\\
+    $\mathbf{Allocation}_i = \mathbf{Allocation}_i + \mathbf{Request}_i$\\
+    $\mathbf{Need}_i = \mathbf{Need}_i - \mathbf{Request}_i$\\
+    If the resulting resource-allocation state if safe,
+    the transaction is complete, and process $P_i$ is allocated its resources.
+    However, if the new state is unsafe, then $P_i$ must wait for $\mathbf{Request}_i$,
+    and the old resource-allocation state is restored.
+\end{enumerate}
