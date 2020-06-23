@@ -1,0 +1,76 @@
+\section{Labs}
+
+\subsection{C Threads}
+
+To compile programs with threads in C, we must use pthread library. Lets see an example of code:
+
+\begin{lstlisting}[
+    caption=C Threads.
+]
+...
+
+void *myThreadFun(void *vargp) 
+{ 
+    sleep(1); 
+    printf("Hello World\n"); 
+    return NULL; 
+} 
+   
+int main() 
+{ 
+    pthread_t thread_id; 
+    pthread_create(&thread_id, NULL,
+     myThreadFun, NULL); 
+    pthread_join(thread_id, NULL); 
+    exit(0); 
+}
+
+\end{lstlisting}
+
+We must first declare a pthread\_t variable to save a struct with some thread internals.
+
+Next we can execute a function in a new thrad by calling \textit{pthread\_create}. If we want to wait for a thread or join the result we may use \textit{pthread\_join}.
+
+pthread\_create() takes 4 arguments:
+\begin{itemize}
+    \item The first argument is a pointer to thread\_id which is set by this function. (pthread\_t)
+    \item The second argument specifies attributes. If the value is NULL, then default attributes shall be used.
+    \item The third argument is name of function (pointer) to be executed for the thread to be created.
+    \item The fourth argument is used to pass arguments to the function.
+\end{itemize}
+
+pthread\_join() takes 2 arguments:
+
+\begin{itemize}
+    \item The first argument is a pointer to thread\_id.
+    \item The second argument is a pointer to the return values.
+\end{itemize}
+
+\subsection{Monte Carlo Method}
+
+Monte Carlo methods, are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. 
+
+In the case of our labs we have used the Monte Carlo method to approximate the $\pi$ constant. We did this with threads so that we could get more samples in less time. When all the threads finished sampling, they merged the results into the main thread. This calculation is nearly embarrasing parallel.
+
+We have implemented in Java , C and c with OpenMP
+
+\subsection{Conway's Game of Life}
+
+The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970. It is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further input. One interacts with the Game of Life by creating an initial configuration and observing how it evolves.
+
+In order to improve the performance of this game, we parallelized using OpenMP. Because each task is embarrasing parallel (read from a oldboard and write on a newboard), we only needed to use \textit{\#pragma omp parallel for}.
+
+It was asked us to to other improvements such as:
+
+\begin{itemize}
+    \item Chnage this program to use Terminal ANSI Escape code
+    \item Include new optional flag "-p" to make a pause for the given number of miliseconds
+    \item Include new flag "-q" to print only the last board
+    \item Experiment different Board Sizes (speedups, efficiency, cost)
+\end{itemize}
+
+\subsection{Parallel Sort}
+
+We have implemented a Parallel Quick Sort spawning tasks with \textit{\#pragma omp task}. The omp task must be inside a \textit{\#pragma omp parallel} and a \textit{\#pragma omp single} so that only one thread executes the creation of tasks but every thread can execute the tasks.
+
+\subsection{To be continued...}
